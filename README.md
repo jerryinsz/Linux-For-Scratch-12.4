@@ -79,8 +79,7 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 ### 📸 运行截图 (Screenshots)
 <img width="1280" height="800" alt="LFS-2025-12-27-05-53-40" src="https://github.com/user-attachments/assets/09dbebae-c0c4-4365-851f-8158b97f9f0e" />
 <img width="2560" height="1440" alt="屏幕截图(984)" src="https://github.com/user-attachments/assets/f6fba389-34a1-4b43-b763-a718f2a52417" />
-<img width="1286" height="997" alt="image" src="https://github.com/user-attachments/assets/22c25c58-b0bc-47d6-99a5-bdfbd9972e0e" />
-<img width="720" height="400" alt="LFS-2025-12-27-05-53-16" src="https://github.com/user-attachments/assets/8fc6d4f7-6057-436d-807a-1adf7ba0eb2b" />
+
 
 ## 📦 资源下载 (Artifacts)
 
