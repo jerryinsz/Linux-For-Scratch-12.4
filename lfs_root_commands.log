@@ -1,0 +1,500 @@
+cat /etc/udev/rules.d/70-persistent-net.rules
+cd /etc/sysconfig/
+cat > ifconfig.eth0 << "EOF"
+ONBOOT=yes
+IFACE=eth0
+SERVICE=ipv4-static
+IP=192.168.1.2
+GATEWAY=192.168.1.1
+PREFIX=24
+BROADCAST=192.168.1.255
+EOF
+
+mkdir -pv /etc/sysconfig
+cd /etc/sysconfig
+cat > ifconfig.eth0 << "EOF"
+ONBOOT=yes
+IFACE=eth0
+SERVICE=ipv4-static
+IP=192.168.112.100
+GATEWAY=192.168.112.2
+PREFIX=24
+BROADCAST=192.168.112.255
+EOF
+
+cat > /etc/resolv.conf << "EOF"
+# Begin /etc/resolv.conf
+
+# 使用 Google 的公共 DNS，非常稳
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+# End /etc/resolv.conf
+EOF
+
+echo "lfs-pc" > /etc/hostname
+cat > /etc/hosts << "EOF"
+# Begin /etc/hosts
+
+127.0.0.1 localhost.localdomain localhost
+127.0.0.1 lfs-pc
+::1       localhost.localdomain localhost ip6-localhost ip6-loopback
+
+# End /etc/hosts
+EOF
+
+cat > /etc/hosts << "EOF"
+# Begin /etc/hosts
+
+# 标准回环地址
+127.0.0.1       localhost.localdomain  localhost
+# 针对你主机的本地映射（FQDN 设为 lfs-pc.lfs.org）
+127.0.1.1       lfs-pc.lfs.org         lfs-pc
+# 你的静态 IP 映射
+192.168.112.100 lfs-pc.lfs.org         lfs-pc
+# IPv6 常用配置
+::1             localhost              ip6-localhost  ip6-loopback
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+
+# End /etc/hosts
+EOF
+
+hostname --fqdn
+ping -c 1 lfs-pc
+cat > /etc/sysconfig/clock << "EOF"
+# Begin /etc/sysconfig/clock
+
+UTC=1
+
+# Set this to any options you might need to give to hwclock,
+# such as machine hardware clock type for Alphas.
+CLOCKPARAMS=
+
+# End /etc/sysconfig/clock
+EOF
+
+cat > /etc/sysconfig/console << "EOF"
+# Begin /etc/sysconfig/console
+
+KEYMAP="us"
+FONT="lat0-16"
+
+# End /etc/sysconfig/console
+EOF
+
+cat > /etc/inputrc << "EOF"
+# Begin /etc/inputrc
+# Modified by Chris Lynn <rlynn@rlynn.org>
+
+# Allow the command prompt to wrap to the next line
+set horizontal-scroll-mode Off
+
+# Enable 8-bit input
+set meta-flag On
+set input-meta On
+
+# Turns off 8th bit stripping
+set convert-meta Off
+
+# Keep the 8th bit for display
+set output-meta On
+
+# none, visible or audible
+set bell-style none
+
+# All of the following map the escape sequence of the value
+# contained in the 1st argument to the readline specific functions
+"\eOd": backward-word
+"\eOc": forward-word
+
+# for linux console
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+# for xterm
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+"\e[7~": beginning-of-line
+"\e[8~": end-of-line
+
+# End /etc/inputrc
+EOF
+
+cat > /etc/shells << "EOF"
+# Begin /etc/shells
+
+/bin/sh
+/bin/bash
+
+# End /etc/shells
+EOF
+
+cat > /etc/inittab << "EOF"
+# Begin /etc/inittab
+
+id:3:initdefault:
+
+si::sysinit:/etc/rc.d/init.d/rc S
+
+l0:0:wait:/etc/rc.d/init.d/rc 0
+l1:S1:wait:/etc/rc.d/init.d/rc 1
+l2:2:wait:/etc/rc.d/init.d/rc 2
+l3:3:wait:/etc/rc.d/init.d/rc 3
+l4:4:wait:/etc/rc.d/init.d/rc 4
+l5:5:wait:/etc/rc.d/init.d/rc 5
+l6:6:wait:/etc/rc.d/init.d/rc 6
+
+ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
+
+su:S06:once:/sbin/sulogin
+s1:1:respawn:/sbin/sulogin
+
+1:2345:respawn:/sbin/agetty --noclear tty1 9600
+2:2345:respawn:/sbin/agetty tty2 9600
+3:2345:respawn:/sbin/agetty tty3 9600
+4:2345:respawn:/sbin/agetty tty4 9600
+5:2345:respawn:/sbin/agetty tty5 9600
+6:2345:respawn:/sbin/agetty tty6 9600
+
+# End /etc/inittab
+EOF
+
+cat > /etc/profile.d/i18n.sh << "EOF"
+# Begin /etc/profile.d/i18n.sh
+
+export LANG=en_US.UTF-8
+
+# End /etc/profile.d/i18n.sh
+EOF
+
+cat /etc/inittab
+cat /etc/sysconfig/clock
+cat /etc/sysconfig/console
+ls -l /etc/inputrc
+cat /etc/shells
+echo "--- LFS 9.6 审计开始 ---"
+for file in /etc/inittab /etc/sysconfig/clock /etc/sysconfig/console /etc/inputrc /etc/shells; do     if [ -f "$file" ]; then         echo "[ OK ] 文件已存在: $file";     else         echo "[ echo "--- LFS 9.6 审计开始 ---" ] 缺失文件: $file";     fi; done
+echo "-----------------------"
+grep "initdefault" /etc/inittab || echo "[警告] /etc/inittab 似乎配置有误"
+echo "--- 审计结束 ---"
+# 生成美国英语的 UTF-8 支持
+localedef -i en_US -f UTF-8 en_US.UTF-8
+# (可选) 如果你以后想在某些环境下支持中文，可以顺便生成这个（虽然控制台看不了，但 SSH 可以）
+localedef -i zh_CN -f UTF-8 zh_CN.UTF-8
+locale -a
+LC_ALL=en_US.UTF-8 locale language
+LC_ALL=en_US.UTF-8 locale charmap
+LC_ALL=en_US.UTF-8 locale int_curr_symbol
+cat > /etc/profile << "EOF"
+# Begin /etc/profile
+
+# 先清除当前所有 locale 相关变量，防止干扰
+for i in $(locale); do
+  unset ${i%=*}
+done
+
+# 如果是在 Linux 原生控制台（VMware 窗口），使用 C.UTF-8
+if [[ "$TERM" = linux ]]; then
+  export LANG=C.UTF-8
+# 如果是通过 SSH 或图形界面登录，使用完整的美国英语 UTF-8
+else
+  export LANG=en_US.UTF-8
+fi
+
+# 别忘了把之前的 PATH 也加回来（LFS 此时通常需要基本的 PATH）
+export PATH=/usr/bin:/usr/sbin
+
+# End /etc/profile
+EOF
+
+cat > /etc/inputrc << "EOF"
+# Begin /etc/inputrc
+# Modified by Chris Lynn <roryo@roryo.dynup.net>
+
+# Allow the command prompt to wrap to the next line
+set horizontal-scroll-mode Off
+
+# Enable 8-bit input
+set meta-flag On
+set input-meta On
+
+# Turns off 8th bit stripping
+set convert-meta Off
+
+# Keep the 8th bit for display
+set output-meta On
+
+# none, visible or audible
+set bell-style none
+
+# All of the following map the escape sequence of the value
+# contained in the 1st argument to the readline specific functions
+"\eOd": backward-word
+"\eOc": forward-word
+
+# for linux console
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+# for xterm
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+
+# for Konsole
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+
+# End /etc/inputrc
+EOF
+
+ls -l /etc/inputrc
+cat > /etc/shells << "EOF"
+# Begin /etc/shells
+
+/bin/sh
+/bin/bash
+
+# End /etc/shells
+EOF
+
+cat > /etc/fstab << "EOF"
+# Begin /etc/fstab
+
+# 文件系统                                 挂载点         类型     选项                     转储  检查
+#                                                                                           顺序
+
+UUID=cd61095f-b608-486b-b691-a16de10c74d3  /              ext4     defaults                 1     1
+
+# 如果你没有单独分 swap 分区，可以注释掉下面这行
+# /dev/<yyy>                               swap           swap     pri=1                    0     0
+
+# 虚拟文件系统 (必需)
+proc           /proc          proc     nosuid,noexec,nodev 0     0
+sysfs          /sys           sysfs    nosuid,noexec,nodev 0     0
+devpts         /dev/pts       devpts   gid=5,mode=620      0     0
+tmpfs          /run           tmpfs    defaults            0     0
+devtmpfs       /dev           devtmpfs mode=0755,nosuid    0     0
+tmpfs          /dev/shm       tmpfs    nosuid,nodev        0     0
+cgroup2        /sys/fs/cgroup cgroup2  nosuid,noexec,nodev 0     0
+
+# End /etc/fstab
+EOF
+
+cd /sources
+tar -xf linux-6.16.1.tar.xz
+cd linux-6.16.1
+make mrproper
+make defconfig
+make menuconfig
+make menuconfig
+exit
+cd /sources/linux-6.16.1
+ls
+make mrproper
+make defconfig
+make menuconfig
+# 因为 13600KF 散热好，咱们直接跑满
+time make -j12
+make modules_install
+cp -iv arch/x86/boot/bzImage /boot/vmlinuz-6.16.1-lfs-12.4
+cp -iv System.map /boot/System.map-6.16.1
+vi /boot/grub/grub.cfg
+cp -iv arch/x86/boot/bzImage /boot/vmlinuz-6.16.1-lfs-12.4
+cp -iv System.map /boot/System.map-6.16.1
+cp -iv .config /boot/config-6.16.1
+cp -r Documentation -T /usr/share/doc/linux-6.16.1
+install -v -m755 -d /etc/modprobe.d
+cat > /etc/modprobe.d/usb.conf << "EOF"
+# Begin /etc/modprobe.d/usb.conf
+
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+
+# End /etc/modprobe.d/usb.conf
+EOF
+
+cd /tmp
+grub-mkrescue --output=grub-img.iso
+xorriso -as cdrecord -v dev=/dev/cdrw blank=as_needed grub-img.iso
+grub-install /dev/sda
+cat > /boot/grub/grub.cfg << "EOF"
+# Begin /boot/grub/grub.cfg
+set default=0
+set timeout=5
+
+insmod part_gpt
+insmod ext2
+set root=(hd0,2)
+set gfxpayload=1024x768x32
+
+menuentry "GNU/Linux, Linux 6.16.1-lfs-12.4" {
+        linux   /boot/vmlinuz-6.16.1-lfs-12.4 root=/dev/sda2 ro
+}
+EOF
+
+# Begin /boot/grub/grub.cfg
+set default=0
+set timeout=5
+insmod part_gpt
+insmod ext2
+set root=(hd0,3)
+menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
+    linux  /boot/vmlinuz-6.16.1-lfs-12.4 root=/dev/nvme0n1p3 ro
+}
+mkdir -pv /boot/grub
+grub-install /dev/nvme0n1
+cat > /boot/grub/grub.cfg << "EOF"
+# Begin /boot/grub/grub.cfg
+set default=0
+set timeout=5
+
+insmod part_gpt
+insmod ext2
+set root=(hd0,3)
+
+menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
+    linux  /boot/vmlinuz-6.16.1-lfs-12.4 root=/dev/nvme0n1p3 ro quiet
+}
+EOF
+
+passwd root
+exit
+vi benchmark.c
+# 编译代码
+gcc benchmark.c -o benchmark -lm
+# 运行程序
+./benchmark
+cd /sources/linux-x.x.x  # 进入你的内核源码目录
+make menuconfig
+poweroff
+cd /sources/openssh-9.9p2  # 或者是你实际的目录名
+make install-sshd
+# 1. 创建启动脚本文件
+cat > /etc/rc.d/init.d/sshd << "EOF"
+#!/bin/sh
+case "$1" in
+    start)
+        echo "Starting SSH Server..."
+        /usr/sbin/sshd
+        ;;
+    stop)
+        echo "Stopping SSH Server..."
+        killall sshd
+        ;;
+    restart)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+EOF
+
+# 2. 赋予执行权限
+chmod +x /etc/rc.d/init.d/sshd
+# 3. 创建软链接，让系统在运行级别 3 (多用户模式) 自动启动它
+ln -sf /etc/rc.d/init.d/sshd /etc/rc.d/rc3.d/S30sshd
+ln -sf /etc/rc.d/init.d/sshd /etc/rc.d/rc3.d/K30sshd
+reboot
+cat > perf_test.c << "EOF"
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double a = 0.0;
+    for (long i = 0; i < 100000000; i++) {
+        a += sqrt((double)i);
+    }
+    printf("Result: %f\n", a);
+    return 0;
+}
+EOF
+
+# 1. 标准编译
+gcc perf_test.c -o test_std -lm
+# 2. 优化编译（针对当前 CPU 架构优化）
+gcc -O3 -march=native perf_test.c -o test_opt -lm
+echo "--- 标准编译运行时间 ---"
+time ./test_std
+echo -e "\n--- 优化编译运行时间 ---"
+time ./test_opt
+cd /sources/linux-* # 进入你的内核源码目录
+make mrproper       # 清理之前的缓存
+make defconfig      # 使用默认配置
+echo "开始多核并行编译测试..."
+# 使用 time 记录时间，-j$(nproc) 代表开启所有核心
+time make -j$(nproc)
+echo "正在测试磁盘连续写入速度 (1GB)..."
+dd if=/dev/zero of=test_file bs=1M count=1024 conv=fdatasync
+rm test_file
+echo -e "\n正在测试小文件大量创建速度 (内核进程调度)..."
+time (for i in {1..2000}; do echo "test" > /tmp/test_$i; done; rm /tmp/test_*)
+poweroff
+cd ../sources
+ls
+# 彻底清空 sources 目录，只留下空文件夹
+rm -rf /sources/*
+ls
+cd ../sources
+ls
+mkdir -pv /mnt/ubuntu
+mount /dev/nvme0n1p1 /mnt/ubuntu
+ls /mnt/ubuntu/boot/vmlinuz*
+ls /mnt/ubuntu/boot/initrd*
+vi /boot/grub/grub.cfg
+reboot
+uname
+gcc -O3 -march=native mem_bench.c -o mem_bench
+./mem_bench
+gcc -O3 -march=native mem_bench.c -o mem_bench
+./mem_bench
+cd /sources
+ls
+ls -F
+gcc -O3 -march=native mem_bench.c -o mem_bench
+cd 
+cd root
+cd /root
+gcc -O3 -march=native mem_bench.c -o mem_bench
+./mem_bench
+tar -xf linux-6.16.1.tar.xz 
+c
+cd linux-6.16.1
+make mrproper
+make defconfig
+# 进入菜单勾选物理机驱动
+make menuconfig
+make menuconfig
+make menuconfig
+make -j12
+cd /
+tar -cvpJf /lfs_backup.tar.xz     --exclude=/lfs_backup.tar.xz     --exclude=/proc     --exclude=/sys     --exclude=/dev     --exclude=/run     --exclude=/boot/lost+found     /
+ls -lh /lfs_backup.tar.xz
+make menuconfig
+make menuconfig
+make menuconfig
+make menuconfig
+make -j12
+bash-5.3# 
+bash-5.3# sudo mount /dev/sda5 /mnt/lfs
+bash-5.3# sudo mount /dev/sda5 /mnt/lfs
+ sudo mount /dev/sda5 /mnt/lfs
+cd /sources/linux-6.16.1
+make modules_install
+cp -v arch/x86/boot/bzImage /boot/vmlinuz-6.16.1-lfs-12.4
+sync
+cd /
+# 这里的名字起名为 v2，方便你区分
+tar -cvpJf /lfs_backup_v2.tar.xz     --exclude=/lfs_backup_v2.tar.xz     --exclude=/proc     --exclude=/sys     --exclude=/dev     --exclude=/run     --exclude=/boot/lost+found     /
