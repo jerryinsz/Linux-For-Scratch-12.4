@@ -1,0 +1,25 @@
+=== Disk Structure ===
+NAME        FSTYPE   FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0       squashfs 4.0                                                    0   100% /snap/bare/5
+loop1       squashfs 4.0                                                    0   100% /snap/core22/2045
+loop2       squashfs 4.0                                                    0   100% /snap/firefox/6565
+loop3       squashfs 4.0                                                    0   100% /snap/core22/2193
+loop4       squashfs 4.0                                                    0   100% /snap/firefox/7559
+loop5       squashfs 4.0                                                    0   100% /snap/firmware-updater/210
+loop6       squashfs 4.0                                                    0   100% /snap/firmware-updater/167
+loop7       squashfs 4.0                                                    0   100% /snap/gnome-42-2204/202
+loop8       squashfs 4.0                                                    0   100% /snap/gtk-common-themes/1535
+loop9       squashfs 4.0                                                    0   100% /snap/gnome-42-2204/226
+loop10      squashfs 4.0                                                    0   100% /snap/snap-store/1270
+loop11      squashfs 4.0                                                    0   100% /snap/snapd/24792
+loop12      squashfs 4.0                                                    0   100% /snap/snapd/25577
+loop13      squashfs 4.0                                                    0   100% /snap/snapd-desktop-integration/315
+sr0                                                                                  
+nvme0n1                                                                              
+├─nvme0n1p1 ext4     1.0         d5afde80-bb85-46fd-b436-044e2151fb06   21.9G    35% /
+├─nvme0n1p2                                                                          
+└─nvme0n1p3 ext4     1.0   LFS   cd61095f-b608-486b-b691-a16de10c74d3   48.5G    16% /mnt/lfs
+                                                                                     /media/user/LFS
+
+=== CPU Info ===
+model name	: 13th Gen Intel(R) Core(TM) i5-13600KF
