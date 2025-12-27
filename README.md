@@ -98,4 +98,4 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 ---
 
 **致谢：** 感谢 Google Gemini (Gemini 3) 在整个构建过程中提供的 22.5w tokens 的深度技术支持与实时报错排查。没有 AI 的高效辅助，这段马拉松般的构建过程将会异常艰难。
-感谢[summit](https://github.com/summit4you)丘文峰老师，感谢为Linux From Scratch事业奋斗的人们！
+感谢[summit](https://github.com/summit4you)丘老师，感谢为Linux From Scratch事业奋斗的人们！
