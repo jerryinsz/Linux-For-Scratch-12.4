@@ -7,7 +7,7 @@
 
 ---
 
-## ⚡ 800字精华省流版 (TL;DR)
+## ⚡ 800字精华省流版 
 
 **什么是 LFS？**  
 Linux From Scratch (LFS) 不是一个发行版，而是一本教你如何从源代码一步步构建 Linux 系统的电子书。本项目基于 LFS 12.4 稳定版，旨在通过纯净的源码编译，深入理解操作系统的底层架构。
@@ -45,7 +45,7 @@ Linux From Scratch (LFS) 不是一个发行版，而是一本教你如何从源�
 
 ---
 
-## 🛠 项目详情 (GitHub 格式规范)
+## 🛠 项目详情 
 
 ### 📋 宿主机规格 (Host Specs)
 *   **CPU**: Intel Core i5-13600KF (14 Cores / 20 Threads)
@@ -84,3 +84,4 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 ---
 
 **致谢：** 感谢 Google Gemini (Gemini 3) 在整个构建过程中提供的 22.5w tokens 的深度技术支持与实时报错排查。没有 AI 的高效辅助，这段马拉松般的构建过程将会异常艰难。
+感谢[summit](https://github.com/summit4you)丘文峰老师，感谢为Linux From Scratch事业奋斗的人们！
