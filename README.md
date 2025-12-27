@@ -3,8 +3,7 @@
 
 > **开发者：** Zhu Yukun  
 > **项目背景：** 计算机专业操作系统大作业  
-> **核心环境：** i5-13600KF + 32GB DDR5 + TiPro7000 NVMe + VMware Workstation
-> **核心环境：** i5-13600KF + 32GB DDR5 + TiPro7000 NVMe + VMware Workstation
+> **核心环境：** i5-13600KF + 32GB DDR5 + TiPro7000 NVMe + VMware Workstation  
 > **开发用时：** 30 小时 （从宿主系统安装开始）
 
 ---
