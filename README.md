@@ -76,7 +76,8 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 ```
 
 ### 📸 运行截图 (Screenshots)
-*(此处建议在 GitHub 上上传你那张带有 "Zhu Yukun" 签名的登录截图)*
+<img width="2560" height="1440" alt="屏幕截图(984)" src="https://github.com/user-attachments/assets/f6fba389-34a1-4b43-b763-a718f2a52417" />
+
 
 ### 📝 许可证 (License)
 本仓库代码及文档基于 **MIT License** 开源。
