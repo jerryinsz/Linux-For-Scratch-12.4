@@ -90,7 +90,7 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 *   **系统镜像 (LFS)**: [点击下载 (Google Drive)](https://drive.google.com/file/d/1HZzIdquAz4MwuXUoW2gqx88cQ90AW9aK/view?usp=drive_link)]
 *   **部分编译日志host**: [查看 GitHub Logs 文件夹](./host_build_commands.log)
 *   **部分编译日志root**: [查看 GitHub Logs 文件夹](./lfs_root_commands.log)
-*   **内核配置文件 (.config)**: [点击查看](./blob/main/kernel.config)
+*   **内核配置文件 (.config)**: [点击查看](./main/kernel.config)
 
 > **注意**：下载的镜像建议在 VMware Workstation 17.5+ 环境下运行，并确保硬件支持虚拟化。
 ### 📝 许可证 (License)
