@@ -1,0 +1,379 @@
+    1  cat > ~/.bash_profile << "EOF"
+    2  exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+    3  EOF
+    4  export LFS=/mnt/lfs
+    5  echo $LFS
+    6  cat > ~/.bashrc << "EOF"
+    7  set +h
+    8  umask 022
+    9  LFS=/mnt/lfs
+   10  LC_ALL=POSIX
+   11  LFS_TGT=$(uname -m)-lfs-linux-gnu
+   12  PATH=/usr/bin
+   13  if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
+   14  PATH=$LFS/tools/bin:$PATH
+   15  CONFIG_SITE=$LFS/usr/share/config.site
+   16  export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
+   17  EOF
+   18  sudo -i
+   19  exit
+   20  echo $PATH
+   21  echo $LFS_TGT
+   22  echo $0
+   23  cat >> ~/.bashrc << "EOF"
+   24  export MAKEFLAGS=-j$(nproc)
+   25  EOF
+   26  # 2. 激活环境
+   27  source ~/.bash_profile
+   28  echo $MAKEFLAGS
+   29  echo $PATH
+   30  echo $LFS_TGT
+   31  exit
+   32  echo $LFS 
+   33  echo $LFS_TGT 
+   34  echo $MAKEFLAGS
+   35  cd $LFS/sources
+   36  ls
+   37  exit
+   38  ls -l $LFS/sources
+   39  echo $LFS        # 输出应为 /mnt/lfs
+   40  echo $LFS_TGT    # 输出应为 x86_64-lfs-linux-gnu
+   41  echo $MAKEFLAGS
+   42  cd $LFS/sources
+   43  tar -xf binutils-2.43.1.tar.xz
+   44  tar -xf binutils-2.45.tar.xz
+   45  cd binutils-2.45
+   46  mkdir -v build
+   47  cd build
+   48  ../configure --prefix=$LFS/tools              --with-sysroot=$LFS              --target=$LFS_TGT                --disable-nls                    --enable-gprofng=no              --disable-werror                 --enable-new-dtags               --enable-default-hash-style=gnu
+   49  make
+   50  echo $?
+   51  echo $LFS  
+   52  echo $LFS_TGT 
+   53  cd $LFS/sources
+   54  rm -rf binutils-2.45
+   55  tar -xf binutils-2.45.tar.xz
+   56  cd binutils-2.45
+   57  mkdir -v build
+   58  cd build
+   59  ../configure --prefix=$LFS/tools              --with-sysroot=$LFS              --target=$LFS_TGT                --disable-nls                    --enable-gprofng=no              --disable-werror                 --enable-new-dtags               --enable-default-hash-style=gnu
+   60  echo $LFS
+   61  echo $MAKEFLAGS
+   62  cd $LFS/sources
+   63  cd $LFS/sources
+   64  ls -l
+   65  rm -rf binutils-2.45
+   66  tar -xf binutils-2.45.tar.xz
+   67  cd binutils-2.45
+   68  mkdir -v build
+   69  cd build
+   70  ../configure --prefix=$LFS/tools              --with-sysroot=$LFS              --target=$LFS_TGT                --disable-nls                    --enable-gprofng=no              --disable-werror                 --enable-new-dtags               --enable-default-hash-style=gnu
+   71  echo $?
+   72  make
+   73  echo $?
+   74  make install
+   75  cd $LFS/sources
+   76  rm -rf binutils-2.45
+   77  tar -xf ../mpfr-4.2.2.tar.xz
+   78  mv -v mpfr-4.2.2 mpfr
+   79  tar -xf ../gmp-6.3.0.tar.xz
+   80  mv -v gmp-6.3.0 gmp
+   81  tar -xf ../mpc-1.3.1.tar.gz
+   82  mv -v mpc-1.3.1 mpc
+   83  tar -xf ../mpfr-4.2.2.tar.xz
+   84  tar -xf mpfr-4.2.2.tar.xz
+   85  mv -v mpfr-4.2.2 mpfr
+   86  tar -xf gmp-6.3.0.tar.xz
+   87  mv -v gmp-6.3.0 gmp
+   88  tar -xf mpc-1.3.1.tar.gz
+   89  mv -v mpc-1.3.1 mpc
+   90  case $(uname -m) in   x86_64)     sed -e '/m64=/s/lib64/lib/'         -i.orig gcc/config/i386/t-linux64;  ;; esac
+   91  ls -l $LFS/tools/bin
+   92  cd $LFS/sources
+   93  rm -rf mpfr gmp mpc
+   94  tar -xf gcc-15.2.0.tar.xz
+   95  cd gcc-15.2.0
+   96  tar -xf ../mpfr-4.2.2.tar.xz
+   97  mv -v mpfr-4.2.2 mpfr
+   98  tar -xf ../gmp-6.3.0.tar.xz
+   99  mv -v gmp-6.3.0 gmp
+  100  tar -xf ../mpc-1.3.1.tar.gz
+  101  mv -v mpc-1.3.1 mpc
+  102  case $(uname -m) in   x86_64)     sed -e '/m64=/s/lib64/lib/'         -i.orig gcc/config/i386/t-linux64;  ;; esac
+  103  mkdir -v build
+  104  cd build
+  105  ../configure                      --target=$LFS_TGT             --prefix=$LFS/tools           --with-glibc-version=2.42     --with-sysroot=$LFS           --with-newlib                 --without-headers             --enable-default-pie          --enable-default-ssp          --disable-nls                 --disable-shared              --disable-multilib            --disable-threads             --disable-libatomic           --disable-libgomp             --disable-libquadmath         --disable-libssp              --disable-libvtv              --disable-libstdcxx           --enable-languages=c,c++
+  106  echo $?
+  107  time make
+  108  make install
+  109  cd ..
+  110  cat gcc/limitx.h gcc/glimits.h gcc/limity.h >   `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/include/limits.h
+  111  $LFS_TGT-gcc --version
+  112  cd $LFS/sources
+  113  rm -rf gcc-15.2.0
+  114  tar -xf linux-6.16.1.tar.xz
+  115  cd linux-6.16.1
+  116  cd $LFS/sources
+  117  cd linux-6.16.1
+  118  make mrproper
+  119  make headers
+  120  find usr/include -type f ! -name '*.h' -delete
+  121  cp -rv usr/include $LFS/usr
+  122  cd $LFS/sources
+  123  rm -rf linux-6.16.1
+  124  ls -l $LFS/tools/lib/gcc/$LFS_TGT/15.2.0/
+  125  cd $LFS/sources
+  126  tar -xf glibc-2.42.tar.xz
+  127  cd glibc-2.42
+  128  patch -Np1 -i ../glibc-2.42-fhs-1.patch
+  129  case $(uname -m) in     i?86)   ln -sfv ldd $LFS/usr/bin/ldd ;;     x86_64) ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64;             ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-lsb-x86-64.so.3;     ;; esac
+  130  mkdir -v build
+  131  cd build
+  132  echo "rootsbindir=/usr/sbin" > configparms
+  133  ../configure                                   --prefix=/usr                            --host=$LFS_TGT                          --build=$(../scripts/config.guess)       --disable-nscd                           libc_cv_slibdir=/usr/lib                 --enable-kernel=5.4
+  134  time make
+  135  make DESTDIR=$LFS install
+  136  sed '/RTLDLIST=/s@/usr@@g' -i $LFS/usr/bin/ldd
+  137  echo 'int main(){}' | $LFS_TGT-gcc -x c - -v -Wl,--verbose &> dummy.log
+  138  readelf -l a.out | grep ': /lib'
+  139  grep -E -o "$LFS/lib.*/S?crt[1in].*succeeded" dummy.log
+  140  grep -B3 "^ $LFS/usr/include" dummy.log
+  141  grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
+  142  grep "/lib.*/libc.so.6 " dummy.log
+  143  grep found dummy.log
+  144  rm -v a.out dummy.log
+  145  cd $LFS/sources
+  146  rm -rf glibc-2.42
+  147  tar -xf gcc-15.2.0.tar.xz
+  148  cd gcc-15.2.0
+  149  mkdir -v build
+  150  cd build
+  151  ../libstdc++-v3/configure          --host=$LFS_TGT                --build=$(../config.guess)     --prefix=/usr                  --disable-multilib             --disable-nls                  --disable-libstdcxx-pch        --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/15.2.0
+  152  make
+  153  make DESTDIR=$LFS install
+  154  rm -v $LFS/usr/lib/lib{stdc++{,exp,fs},supc++}.la
+  155  cd $LFS/sources
+  156  rm -rf gcc-15.2.0
+  157  exit
+  158  echo $LFS        # 必须是 /mnt/lfs
+  159  echo $LFS_TGT    # 必须是 x86_64-lfs-linux-gnu
+  160  echo $MAKEFLAGS  # 应该是 -j12
+  161  echo $PATH       # 开头必须是 /mnt/lfs/tools/bin
+  162  echo $PATH       # 开头必须是 /mnt/lfs/tools/bin
+  163  echo $PATH       # 开头必须是 /mnt/lfs/tools/bin
+  164  echo $MAKEFLAGS  # 应该是 -j12
+  165  echo $LFS_TGT    # 必须是 x86_64-lfs-linux-gnu
+  166  echo $LFS        # 必须是 /mnt/lfs
+  167  $LFS_TGT-gcc -v
+  168  cd $LFS/sources
+  169  tar -xf m4-1.4.20.tar.xz
+  170  cd m4-1.4.20
+  171  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(build-aux/config.guess)
+  172  make
+  173  make DESTDIR=$LFS install
+  174  cd sources
+  175  cd $LFS/sources
+  176  rm -rf m4-1.4.20
+  177  cd $LFS/sources
+  178  tar -xf ncurses-6.5-20250809.tgz
+  179  cd ncurses-6.5-20250809
+  180  sed -i s/mawk// configure
+  181  mkdir build
+  182  pushd build
+  183    ../configure --prefix=$LFS/tools AWK=gawk
+  184    make -C include
+  185    make -C progs tic
+  186    install progs/tic $LFS/tools/bin
+  187  popd
+  188  ./configure --prefix=/usr                            --host=$LFS_TGT                          --build=$(./config.guess)                --mandir=/usr/share/man                  --with-manpage-format=normal             --with-shared                            --without-normal                         --with-cxx-shared                        --without-debug                          --without-ada                            --disable-stripping                      AWK=gawk
+  189  make
+  190  make DESTDIR=$LFS install
+  191  ln -sv libncursesw.so $LFS/usr/lib/libncurses.so
+  192  sed -e 's/^#if.*XOPEN.*$/#if 1/'     -i $LFS/usr/include/curses.h
+  193  cd $LFS/sources
+  194  rm -rf ncurses-6.5-20250809
+  195  cd $LFS/sources
+  196  cd $LFS/sources
+  197  tar -xf bash-5.3.tar.gz
+  198  cd bash-5.3
+  199  ./configure --prefix=/usr                                  --build=$(sh support/config.guess)             --host=$LFS_TGT                                --without-bash-malloc
+  200  make
+  201  make DESTDIR=$LFS install
+  202  ln -sv bash $LFS/bin/sh
+  203  cd $LFS/sources
+  204  rm -rf bash-5.3
+  205  cd $LFS/sources
+  206  tar -xf coreutils-9.7.tar.xz
+  207  cd coreutils-9.7
+  208  patch -Np1 -i ../coreutils-9.7-i18n-1.patch
+  209  ./configure --prefix=/usr                                 --host=$LFS_TGT                               --build=$(build-aux/config.guess)             --enable-install-program=hostname             --enable-no-install-program=kill,uptime
+  210  time make -j12
+  211  touch aclocal.m4
+  212  touch Makefile.in
+  213  touch configure
+  214  touch src/config.h.in
+  215  touch man/chroot.8
+  216  time make -j12
+  217  echo$?
+  218  cd $LFS/sources
+  219  rm -rf coreutils-9.7
+  220  tar -xf coreutils-9.7.tar.xz
+  221  cd coreutils-9.7
+  222  patch -Np1 -i ../coreutils-9.7-i18n-1.patch
+  223  patch -Np1 -i ../coreutils-9.7-upstream_fix-1.patch
+  224  touch Makefile.in configure aclocal.m4 src/config.h.in
+  225  ./configure --prefix=/usr                                 --host=$LFS_TGT                               --build=$(build-aux/config.guess)             --enable-install-program=hostname             --enable-no-install-program=kill,uptime
+  226  make
+  227  cd $LFS/sources
+  228  rm -rf coreutils-9.7
+  229  tar -xf coreutils-9.7.tar.xz
+  230  cd coreutils-9.7
+  231  ./configure --prefix=/usr                                 --host=$LFS_TGT                               --build=$(build-aux/config.guess)             --enable-install-program=hostname             --enable-no-install-program=kill,uptime
+  232  make
+  233  make DESTDIR=$LFS install
+  234  mv -v $LFS/usr/bin/chroot              $LFS/usr/sbin
+  235  mkdir -pv $LFS/usr/share/man/man8
+  236  mv -v $LFS/usr/share/man/man1/chroot.1 $LFS/usr/share/man/man8/chroot.8
+  237  sed -i 's/"1"/"8"/'                    $LFS/usr/share/man/man8/chroot.8
+  238  cd $LFS/sources
+  239  ls -l $LFS/usr/bin/ls
+  240  ls -l $LFS/usr/sbin/chroot
+  241  cd $LFS/sources
+  242  rm -rf coreutils-9.7
+  243  tar -xf diffutils-3.12.tar.xz
+  244  cd diffutils-3.12
+  245  ./configure --prefix=/usr               --host=$LFS_TGT             gl_cv_func_strcasecmp_works=y             --build=$(./build-aux/config.guess)
+  246  time make -j12
+  247  make DESTDIR=$LFS install
+  248  cd $LFS/sources
+  249  rm -rf diffutils-3.12
+  250  cd $LFS/sources
+  251  tar -xf file-5.46.tar.gz
+  252  cd file-5.46
+  253  mkdir build
+  254  pushd build
+  255    ../configure --disable-bzlib                     --disable-libseccomp                --disable-xzlib                     --disable-zlib
+  256    make
+  257  popd
+  258  ./configure --prefix=/usr --host=$LFS_TGT --build=$(./config.guess)
+  259  make FILE_COMPILE=$(pwd)/build/src/file
+  260  make DESTDIR=$LFS install
+  261  rm -v $LFS/usr/lib/libmagic.la
+  262  cd $LFS/sources
+  263  rm -rf file-5.46
+  264  cd $LFS/sources
+  265  tar -xf findutils-4.10.0.tar.gz
+  266  tar -xf findutils-4.10.0.tar.xz 
+  267  cd findutils-4.10.0
+  268  ./configure --prefix=/usr                               --localstatedir=/var/lib/locate             --host=$LFS_TGT                             --build=$(build-aux/config.guess)
+  269  make
+  270  make DESTDIR=$LFS install
+  271  cd $LFS/sources
+  272  rm -rf findutils-4.10.0
+  273  cd $LFS/sources
+  274  tar -xf gawk-5.3.2.tar.xz 
+  275  cd gawk-5.3.2
+  276  sed -i 's/extras//' Makefile.in
+  277  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(build-aux/config.guess)
+  278  make
+  279  make DESTDIR=$LFS install
+  280  cd $LFS/sources
+  281  rm -rf gawk-5.3.2
+  282  cd $LFS/sources
+  283  tar -xf grep-3.12.tar.xz 
+  284  cd grep-3.12
+  285  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(./build-aux/config.guess)
+  286  make
+  287  make DESTDIR=$LFS install
+  288  cd $LFS/sources
+  289  rm -rf grep-3.12
+  290  cd $LFS/sources
+  291  tar -xf gzip-1.14.tar.xz 
+  292  cd gzip-1.14
+  293  ./configure --prefix=/usr --host=$LFS_TGT
+  294  make
+  295  make DESTDIR=$LFS install
+  296  cd $LFS/sources
+  297  cd $LFS/sources
+  298  tar -xf make-4.4.1.tar.gz 
+  299  cd make-4.4.1
+  300  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(build-aux/config.guess)
+  301  make
+  302  make DESTDIR=$LFS install
+  303  cd $LFS/sources
+  304  rm -rf make-4.4.1
+  305  cd $LFS/sources
+  306  tar -xf
+  307  cd $LFS/sources
+  308  tar -xf patch-2.8.tar.xz 
+  309  cd patch-2.8
+  310  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(build-aux/config.guess)
+  311  make
+  312  make DESTDIR=$LFS install
+  313  cd $LFS/sources
+  314  rm -rf patch-2.8
+  315  cd $LFS/sources
+  316  tar -xf sed-4.9.tar.xz 
+  317  cd sed-4.9
+  318  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(./build-aux/config.guess)
+  319  make
+  320  make DESTDIR=$LFS install
+  321  cd $LFS/sources
+  322  rm -rf sed-4.9
+  323  cd $LFS/sources
+  324  tar -xf tar-1.35.tar.xz 
+  325  cd tar-1.35
+  326  ./configure --prefix=/usr               --host=$LFS_TGT             --build=$(build-aux/config.guess)
+  327  make
+  328  make DESTDIR=$LFS install
+  329  cd $LFS/sources
+  330  rm -rf tar-1.35
+  331  cd $LFS/sources
+  332  tar -xf xz-5.8.1.tar.xz 
+  333  cd xz-5.8.1
+  334  ./configure --prefix=/usr                                 --host=$LFS_TGT                               --build=$(build-aux/config.guess)             --disable-static                              --docdir=/usr/share/doc/xz-5.8.1
+  335  make
+  336  make DESTDIR=$LFS install
+  337  rm -v $LFS/usr/lib/liblzma.la
+  338  cd $LFS/sources
+  339  rm -rf xz-5.8.1
+  340  cd $LFS/sources
+  341  cd $LFS/sources
+  342  tar -xf binutils-2.45.tar.xz
+  343  cd binutils-2.45
+  344  mkdir -v build
+  345  cd build
+  346  cd binutils-2.45
+  347  cd $LFS/sources
+  348  cd binutils-2.45
+  349  sed '6031s/$add_dir//' -i ltmain.sh
+  350  mkdir -v build
+  351  cd       build
+  352  ../configure                       --prefix=/usr                  --build=$(../config.guess)     --host=$LFS_TGT                --disable-nls                  --enable-shared                --enable-gprofng=no            --disable-werror               --enable-64-bit-bfd            --enable-new-dtags             --enable-default-hash-style=gnu
+  353  make
+  354  make DESTDIR=$LFS install
+  355  rm -v $LFS/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes,sframe}.{a,la}
+  356  cd $LFS/sources
+  357  rm -rf binutils-2.45
+  358  cd $LFS/sources
+  359  rm -rf gcc-15.2.0
+  360  tar -xf gcc-15.2.0.tar.xz
+  361  cd gcc-15.2.0
+  362  tar -xf ../mpfr-4.2.2.tar.xz
+  363  mv -v mpfr-4.2.2 mpfr
+  364  tar -xf ../gmp-6.3.0.tar.xz
+  365  mv -v gmp-6.3.0 gmp
+  366  tar -xf ../mpc-1.3.1.tar.gz
+  367  mv -v mpc-1.3.1 mpc
+  368  case $(uname -m) in   x86_64)     sed -e '/m64=/s/lib64/lib/'         -i.orig gcc/config/i386/t-linux64;   ;; esac
+  369  sed '/thread_header =/s/@.*@/gthr-posix.h/'     -i libgcc/Makefile.in libstdc++-v3/include/Makefile.in
+  370  mkdir -v build
+  371  cd       build
+  372  ../configure                       --build=$(../config.guess)     --host=$LFS_TGT                --target=$LFS_TGT              --prefix=/usr                  --with-build-sysroot=$LFS      --enable-default-pie           --enable-default-ssp           --disable-nls                  --disable-multilib             --disable-libatomic            --disable-libgomp              --disable-libquadmath          --disable-libsanitizer         --disable-libssp               --disable-libvtv               --enable-languages=c,c++       LDFLAGS_FOR_TARGET=-L$PWD/$LFS_TGT/libgcc
+  373  make
+  374  make DESTDIR=$LFS install
+  375  ln -sv gcc $LFS/usr/bin/cc
+  376  cd $LFS/sources
+  377  rm -rf gcc-15.2.0
+  378  exit
+  379  history > host_build_commands.log
