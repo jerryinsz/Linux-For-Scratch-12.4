@@ -82,6 +82,16 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 <img width="1286" height="997" alt="image" src="https://github.com/user-attachments/assets/22c25c58-b0bc-47d6-99a5-bdfbd9972e0e" />
 <img width="720" height="400" alt="LFS-2025-12-27-05-53-16" src="https://github.com/user-attachments/assets/8fc6d4f7-6057-436d-807a-1adf7ba0eb2b" />
 
+## 📦 资源下载 (Artifacts)
+
+由于 LFS 系统镜像体积较大，已上传至 Google Drive 供下载参考。
+
+*   **与AI对话记录**: [点击下载 (Google Drive)](https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221xRiWuuht51Hi1MuguOGFpCyIrmwkyeMd%22%5D,%22action%22:%22open%22,%22userId%22:%22107972874005005173578%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing)]
+*   **系统镜像 (LFS)**: [点击下载 (Google Drive)](https://drive.google.com/file/d/1HZzIdquAz4MwuXUoW2gqx88cQ90AW9aK/view?usp=drive_link)]
+*   **全流程编译日志**: [查看 GitHub Logs 文件夹](./logs/)
+*   **内核配置文件 (.config)**: [点击查看](./logs/kernel.config)
+
+> **注意**：下载的镜像建议在 VMware Workstation 17.5+ 环境下运行，并确保硬件支持虚拟化。
 ### 📝 许可证 (License)
 本仓库代码及文档基于 **MIT License** 开源。
 
