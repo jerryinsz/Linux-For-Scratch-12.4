@@ -7,7 +7,10 @@
 > **开发用时：** 30 小时 （从宿主系统安装开始，含睡觉时间）
 
 ---
+![hongsedaqixibaomobansheji_7681159_副本](https://github.com/user-attachments/assets/e26a03a5-dd15-470b-929b-4db555833d67)
 
+
+---
 ## ⚡ 800字精华省流版 
 
 **什么是 LFS？**  
