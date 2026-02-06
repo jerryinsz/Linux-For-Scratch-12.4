@@ -7,10 +7,7 @@
 > **开发用时：** 30 小时 （从宿主系统安装开始，含睡觉时间）
 
 ---
-![hongsedaqixibaomobansheji_7681159_副本](https://github.com/user-attachments/assets/e26a03a5-dd15-470b-929b-4db555833d67)
 
-
----
 ## ⚡ 800字精华省流版 
 
 **什么是 LFS？**  
@@ -88,8 +85,8 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 
 由于 LFS 系统镜像体积较大，已上传至 Google Drive 供下载参考。
 
-*   **与AI对话记录**: [点击下载 (Google Drive)](https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221xRiWuuht51Hi1MuguOGFpCyIrmwkyeMd%22%5D,%22action%22:%22open%22,%22userId%22:%22107972874005005173578%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing)]
-*   **系统镜像 (LFS)**: [点击下载 (Google Drive)](https://drive.google.com/file/d/1HZzIdquAz4MwuXUoW2gqx88cQ90AW9aK/view?usp=drive_link)]
+*   **与AI对话记录**: [点击下载 (Google Drive)](https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221xRiWuuht51Hi1MuguOGFpCyIrmwkyeMd%22%5D,%22action%22:%22open%22,%22userId%22:%22107972874005005173578%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing)
+*   **系统镜像 (LFS)**: [点击下载 (Google Drive)](https://drive.google.com/file/d/1HZzIdquAz4MwuXUoW2gqx88cQ90AW9aK/view?usp=drive_link)
 *   **部分编译日志host**: [查看 GitHub Logs 文件夹](./host_build_commands.log)
 *   **部分编译日志root**: [查看 GitHub Logs 文件夹](./lfs_root_commands.log)
 *   **内核配置文件 (.config)**: [点击查看](./kernel.config)
@@ -102,3 +99,8 @@ menuentry "Linux From Scratch, Linux 6.16.1-lfs-12.4" {
 
 **致谢：** 感谢 Google Gemini (Gemini 3) 在整个构建过程中提供的 22.5w tokens 的深度技术支持与实时报错排查。没有 AI 的高效辅助，这段马拉松般的构建过程将会异常艰难。
 感谢[summit](https://github.com/summit4you)丘老师，感谢为Linux From Scratch事业奋斗的人们！
+
+![hongsedaqixibaomobansheji_7681159_副本](https://github.com/user-attachments/assets/e26a03a5-dd15-470b-929b-4db555833d67)
+
+
+---
